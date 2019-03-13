@@ -1,0 +1,4 @@
+*-- Script de teste, toda primeira linha é ignorada! Parametros separados por espaço. --*
+6
+5 runfolder
+4
