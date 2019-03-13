@@ -1,0 +1,6 @@
+/Benchmarks/*
+/Converted Benchmarks/*
+/runfolder/*
+script.txt
+__pycache__/
+*.py[cod]
