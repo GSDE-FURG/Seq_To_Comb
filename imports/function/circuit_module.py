@@ -147,7 +147,8 @@ def divideoutputs(mode,extraoutputs,extrainputs,original_inputs,original_outputs
 				cell_list[output].influence = cell_list[output].influence + 1
 				for inputsignal in cell_list[output].inputs:
 					cell_list[inputsignal].drive = cell_list[inputsignal].drive + 1
-				newdata.append(data[cell_list[output].line])
+				if data[cell_list[output].line] not in newdata:
+					newdata.append(data[cell_list[output].line])
 				for node in nodesused:
 					cell_list[node].drive = 0 
 				for node in nodesused:
@@ -157,7 +158,8 @@ def divideoutputs(mode,extraoutputs,extrainputs,original_inputs,original_outputs
 					else:
 						currentwires.append(node)
 						cell_list[node].influence = cell_list[node].influence + 1
-						newdata.append(data[cell_list[node].line])
+						if data[cell_list[node].line] not in newdata:
+							newdata.append(data[cell_list[node].line])
 						for inputsignal in cell_list[node].inputs:
 							cell_list[inputsignal].drive = cell_list[inputsignal].drive + 1
 				numinputs.append(len(inputs))
@@ -173,13 +175,15 @@ def divideoutputs(mode,extraoutputs,extrainputs,original_inputs,original_outputs
 				gatenumber = len(currentwires)
 				numgates.append(gatenumber)
 			else: #possivel de fazer isso na recursao tbm
-				newdata.append(data[cell_list[output].line])
+				if data[cell_list[output].line] not in newdata:
+					newdata.append(data[cell_list[output].line])
 				for node in nodesused:
 					if cell_list[node].isinput:
 						inputs.append(node)
 					else:
 						currentwires.append(node)
-						newdata.append(data[cell_list[node].line])
+						if data[cell_list[node].line] not in newdata:
+							newdata.append(data[cell_list[node].line])
 			newmodule = namemodule.strip() + "_" + output + " "
 
 			if mode == "verilog":

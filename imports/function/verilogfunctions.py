@@ -87,11 +87,11 @@ def V_createfile(data,extraoutputs,extrainputs,original_outputs,original_inputs,
 	inputset = set(extrainputs + original_inputs)
 	outputset = set(extraoutputs + original_outputs)
 	for inputs in inputset :
-		modulo = modulo + inputs + ", "
-		istring = istring + inputs + ", "
+		modulo = modulo + inputs.replace("\\","bar") + ", "
+		istring = istring + inputs.replace("\\","bar") + ", "
 	for outputs in outputset : 
-		modulo = modulo + outputs + ", "
-		ostring = ostring + outputs + ", "
+		modulo = modulo + outputs.replace("\\","bar") + ", "
+		ostring = ostring + outputs.replace("\\","bar") + ", "
 	modulo = modulo[:len(modulo) - 2] + " );\n"
 	istring = istring[:len(istring) - 2] + ";\n"
 	ostring = ostring[:len(ostring) - 2] + ";\n"
@@ -100,9 +100,9 @@ def V_createfile(data,extraoutputs,extrainputs,original_outputs,original_inputs,
 	else:
 		wirestring = "wire "
 		for wires in wiredata:
-			wirestring = wirestring + wires + ", "
+			wirestring = wirestring + wires.replace("\\","bar") + ", "
 		wirestring = wirestring[:len(wirestring) - 2] + ";\n"
-	data = modulo + istring + ostring + wirestring + data
+	data = modulo + istring + ostring + wirestring + data.replace("\\","bar")
 	return data	
 
 def V_createcell_list(data,original_inputs,extrainputs):
@@ -137,18 +137,15 @@ def V_createcell_list(data,original_inputs,extrainputs):
 		cell_list = {}
 		while cont < len(data):
 			word = data[cont]
+			if(len(word) == 0):
+				cont = cont + 1
+				continue
 			cell = []
-			location = 0
-			while location != -1:
-				try:
-					location = word.index(".")
-					word = word[(location+1):]
-					location = word.index("(")
-					location2 = word.index(")")
-					cell.append(word[(location+1):location2])
-				except (ValueError):
-					location = -1
-			cell = cell[::-1] #para o primeiro ser o output assim como o assign
+			location = word.index("(")
+			location2 = word.index(")")
+			word = word[(location+1):location2]
+			word = word.replace(" ","")
+			cell = word.split(",")
 			node = cell.pop(0)
 			cell_list[node] = Nodeinfo(cont,cell,False)
 			cont = cont + 1
